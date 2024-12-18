@@ -1,7 +1,7 @@
 name: Form Builder
 slug: form-builder
 type: plugin
-version: 0.8.1
+version: 0.8.2
 description: Admin interface to build simple forms as flex objects to insert into page or modular templates.
 icon: clipboard
 author:

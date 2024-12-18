@@ -2,6 +2,10 @@
 
 The **Form Builder** Plugin is an extension for [Grav CMS](https://github.com/getgrav/grav). It offers a simple Admin interface to build simple contact forms as flex objects to be inserted into page or modular templates.
 
+> This plugin is in very early development and has been released for public testing. There are likely many errors or mistakes. If you see areas of improvement, please do let me know via GitHub issue or on the Grav CMS Discord server.
+
+The intention for this plugin was to create a simple interface for frontend form creation within the Grav Admin interface. Manually creating forms in frontend can be daunting for some end users.
+
 ## Installation
 
 Installing the Form Builder plugin can be done in one of three ways: The GPM (Grav Package Manager) installation method lets you quickly install the plugin with a simple terminal command, the manual method lets you do so via a zip file, and the admin method lets you do so via the Admin Plugin.
