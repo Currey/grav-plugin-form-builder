@@ -1,0 +1,18 @@
+{% set form = form_builder(form_key) %}
+
+{% if form %}
+    {% include "forms/form.html.twig" with {
+        form: {
+            name: form.name,
+            id: form.id ?: form.name,
+            method: form.method ?: 'POST',
+            action: form.action ?: '',
+            classes: form.classes ?: '',
+            fields: form.fields,
+            buttons: form.buttons,
+            process: form.process
+        }
+    } %}
+{% else %}
+    <div class="alert">Form not found</div>
+{% endif %}

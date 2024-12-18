@@ -1,0 +1,690 @@
+title: PLUGIN_FORM_BUILDER.FORM_BUILDER
+description: PLUGIN_FORM_BUILDER.PLUGIN_DESC
+type: flex-objects
+object:
+  class: 'Grav\Plugin\FormBuilderPlugin\FormObject'
+
+# Flex Configuration
+config:
+  # Administration Configuration
+  admin:
+    # Admin router (optional)
+    router:
+      path: '/form-builder'
+      redirects: # List of redirects (from: to)
+        '/flex-objects/form-builder': '/form-builder'
+
+    # Admin menu (optional)
+    menu:
+      list:
+        route: '/form-builder'
+        title: PLUGIN_FORM_BUILDER.CONFIG.MENU
+        icon: fa-clipboard
+        # Authorization to collection admin
+        authorize: ['admin.form-builder.list', 'admin.super']
+        # Priority -10 .. 10 (highest goes up)
+        priority: 1
+
+    # Admin template type / folder
+    template: default
+
+    # Permissions
+    permissions:
+      # Primary permissions
+      admin.form-builder:
+        type: crudpl
+        label: PLUGIN_FORM_BUILDER.FORM_BUILDER
+
+    # List view
+    list:
+      title: PLUGIN_FORM_BUILDER.FORM_BUILDER
+      fields:
+        header.published:
+          field:
+            type: toggle
+            label: Published
+          width: 15
+        header.form.title:
+          field:
+            label: Form Title
+          link: edit
+        header.form.name:
+
+    # Edit View
+    edit:
+      title:
+        template: '{{ object.header.form.title ?? ''PLUGIN_FORM_BUILDER.CREATE_FORM''|tu }}'
+
+    # Preview View
+    preview:
+      enabled: false
+      route:
+      #template: '/plugins/flex-objects/directory:contacts'
+
+    # Data Export
+    export:
+      enabled: true
+      method: 'jsonSerialize'
+      formatter:
+        class: 'Grav\Framework\File\Formatter\YamlFormatter'
+      filename: 'form-builder'
+
+  # Site Configuration
+  site:
+    templates:
+      collection:
+        # Lookup for the template layout files for collections of objects
+        paths:
+          - 'flex/{TYPE}/collection/{LAYOUT}{EXT}'
+      object:
+        # Lookup for the template layout files for objects
+        paths:
+          - 'flex/{TYPE}/object/{LAYOUT}{EXT}'
+      defaults:
+        # Default template {TYPE}; overridden by filename of this blueprint if template folder exists
+        type: 'form-builder'
+        # Default template {LAYOUT}; can be overridden in render calls (usually Twig in templates)
+        layout: default
+
+  # Data Configuration
+  data:
+    object: 'Grav\Plugin\FormBuilder\Flex\Types\FormBuilder\FormBuilderObject'
+    collection: 'Grav\Common\Flex\Types\Generic\GenericCollection'
+    index: 'Grav\Common\Flex\Types\Generic\GenericIndex'
+    storage:
+      class: 'Grav\Framework\Flex\Storage\FolderStorage'
+      options:
+        formatter:
+          class: 'Grav\Framework\File\Formatter\MarkdownFormatter'
+        folder: user-data://flex-objects/form-builder
+    search:
+      # Search options
+      options:
+        contains: 1
+      # Fields to be searched
+      fields:
+        - header.form.title
+    ordering:
+      header.form.title: ASC
+
+form:
+  validation: loose
+  fields:
+
+    tabs:
+      type: tabs
+      fields:
+
+        form:
+          type: tab
+          title: Form
+          fields:
+
+            header.form.title:
+              type: text
+              label: Title
+              validate:
+                required: true
+
+            header.form.name:
+              type: text
+              label: Form Name
+              placeholder: Leave blank to generate name from Title.
+              validate:
+                pattern: '[a-z\-_]+[a-z0-9\-_]+'
+              help: "Form name must only contain a-z, '-', '_' characters."
+
+            form_fields:
+              type: fieldset
+              title: PLUGIN_FORM_BUILDER.FORM_FIELDS
+              icon: edit
+              collapsible: true
+              fields:
+
+            # form_fields:
+            #   type: section
+            #   title: PLUGIN_FORM_BUILDER.FORM_FIELDS
+            #   underline: true
+
+                header.form.fields:
+                  name: fields
+                  type: list
+                  label: PLUGIN_FORM_BUILDER.FIELDS
+                  style: vertical
+                  collapsed: true
+                  classes: data-field
+                  fields:
+
+                    .label:
+                      type: text
+                      label: PLUGIN_FORM_BUILDER.FIELD_LABEL
+                      placeholder: PLUGIN_FORM_BUILDER.FIELD_LABEL
+                      classes: field-label
+                      validate:
+                        required: true
+                      autofocus: true
+                    .type:
+                      type: select
+                      label: PLUGIN_FORM_BUILDER.FIELD_TYPE
+                      options:
+                        text: Text
+                        email: Email
+                        tel: Telephone
+                        textarea: Textarea
+                        url: URL
+                        select: Select
+                        checkboxes: Checkboxes
+                        radio: Radio
+                        basic-captcha: Basic Captcha
+                        captcha: Captcha
+                      validate:
+                        required: true
+                    # .key:
+                    #   type: key
+                    #   label: PLUGIN_FORM_BUILDER.FIELD_NAME
+                    #   placeholder: Leave blank to generate name from field label
+                    #   help: PLUGIN_FORM_BUILDER.FIELD_NAME_HELP
+                    #   classes: field-key
+                    #   validate:
+                    #     required: true
+                    #     type: slug
+                    #     pattern: '[a-z0-9\-_]+'
+                    .name:
+                      type: text
+                      label: PLUGIN_FORM_BUILDER.FIELD_NAME
+                      placeholder: Leave blank to generate name from field label
+                      help: PLUGIN_FORM_BUILDER.FIELD_NAME_HELP
+                      classes: field-key
+                      validate:
+                        required: true
+                        type: slug
+                        pattern: '[a-z0-9\-_]+'
+                    .id:
+                      type: text
+                      label: PLUGIN_FORM_BUILDER.FIELD_ID
+                      placeholder: PLUGIN_FORM_BUILDER.FIELD_ID_PLACEHOLDER
+                      classes: field-id
+                      validate:
+                        pattern: '[a-z\-_]+[a-z0-9\-_]*'
+                      help: PLUGIN_FORM_BUILDER.FIELD_ID_HELP
+                    .placeholder:
+                      type: text
+                      label: PLUGIN_FORM_BUILDER.FIELD_PLACEHOLDER_TEXT
+                      toggleable: true
+                    .outerclasses:
+                      type: text
+                      label: PLUGIN_FORM_BUILDER.FIELD_CLASSES
+                      help: PLUGIN_FORM_BUILDER.FORM_CLASSES
+                      toggleable: true
+                    .autocomplete:
+                      type: toggle
+                      label: PLUGIN_FORM_BUILDER.FIELD_AUTOCOMPLETE
+                      toggleable: true
+                      options:
+                        1: On
+                        0: Off
+                      highlight: 0
+                      default: 0
+                      validate:
+                        type: bool
+                    .autofocus:
+                      type: toggle
+                      label: PLUGIN_FORM_BUILDER.FIELD_AUTOFOCUS
+                      toggleable: true
+                      options:
+                        1: On
+                        0: Off
+                      highlight: 0
+                      default: 0
+                      validate:
+                        type: bool
+                    .disabled:
+                      type: toggle
+                      label: PLUGIN_FORM_BUILDER.FIELD_DISABLED
+                      toggleable: true
+                      options:
+                        1: On
+                        0: Off
+                      highlight: 0
+                      default: 0
+                      validate:
+                        type: bool
+                    .novalidate:
+                      type: toggle
+                      label: PLUGIN_FORM_BUILDER.FIELD_NOVALIDATE
+                      toggleable: true
+                      options:
+                        1: On
+                        0: Off
+                      highlight: 0
+                      default: 0
+                      validate:
+                        type: bool
+                    .default:
+                      type: text
+                      label: PLUGIN_FORM_BUILDER.FIELD_DEFAULT
+                      toggleable: true
+                    .help:
+                      type: text
+                      label: PLUGIN_FORM_BUILDER.FIELD_HELP
+                      toggleable: true
+                      help: PLUGIN_FORM_BUILDER.FIELD_HELP_HELP
+                    .validate.required:
+                      type: toggle
+                      label: PLUGIN_FORM_BUILDER.VALIDATE_REQUIRED
+                      toggleable: true
+                      options:
+                        1: Required
+                        0: Not required
+                      highlight: 1
+                      default: 0
+                      validate:
+                        type: bool
+                    .validate.message:
+                      type: text
+                      label: PLUGIN_FORM_BUILDER.VALIDATE_MESSAGE
+                      toggleable: true
+                      help: PLUGIN_FORM_BUILDER.VALIDATE_MESSAGE_HELP
+
+                    # options:
+                    #   type: conditional
+                    #   condition: 'grav.page.header.form.fields[n].type == "select"'
+                    #   fields:
+                    .attributes:
+                      type: array
+                      label: PLUGIN_FORM_BUILDER.FIELD_ATTR
+                      help: PLUGIN_FORM_BUILDER.FIELD_ATTR_HELP
+                      toggleable: true
+                    .options:
+                      type: array
+                      label: PLUGIN_FORM_BUILDER.FIELD_OPTIONS
+                      help: PLUGIN_FORM_BUILDER.FIELD_OPTIONS_HELP
+                      toggleable: true
+                      # style: vertical
+
+            # header.form.fields.captcha:
+            #   type: fieldset
+            #   title: PLUGIN_FORM_BUILDER.CAPTCHA_FIELD
+            #   icon: check-circle
+            #   collapsible: true
+            #   fields:
+            #
+            #     header.form.fields.captcha.type:
+            #       type: elements
+            #       label: PLUGIN_FORM_BUILDER.CAPTCHA_TYPE
+            #       options:
+            #         0: None
+            #         basic_captcha: Basic Captcha
+            #         turnstile: Cloudflare Turnstile
+            #         captcha: Google ReCAPTCHA
+            #       fields:
+            #
+            #         basic_captcha:
+            #           type: element
+            #           fields:
+            #
+            #             header.form.fields.captcha.theme:
+            #               type: text
+            #               label: Theme
+            #               toggleable: true
+            #
+            #         turnstile:
+            #           type: element
+            #           fields:
+            #
+            #             header.form.fields.captcha.theme:
+            #               type: text
+            #               label: Theme
+            #               toggleable: true
+            #
+            #         captcha:
+            #           type: element
+            #           fields:
+            #
+            #             header.form.fields.captcha.theme:
+            #               type: text
+            #               label: Theme
+            #               toggleable: true
+            #
+            #             header.form.fields.captcha.version:
+            #               type: select
+            #               label: Version
+            #               toggleable: true
+            #               options:
+            #                 '2-checkbox': '2-checkbox'
+            #                 '2-invisible': '2-invisible'
+            #                 '3': '3'
+
+            button_fields:
+              type: fieldset
+              title: PLUGIN_FORM_BUILDER.BUTTONS_TITLE
+              icon: hand-pointer-o
+              collapsible: true
+              fields:
+
+                header.form.form_button_outer_classes:
+                  type: text
+                  label: PLUGIN_FORM_BUILDER.BUTTONS_CLASSES
+                  toggleable: true
+                  help: PLUGIN_FORM_BUILDER.BUTTONS_CLASSES_HELP
+
+                header.form.buttons:
+                  name: buttons
+                  type: list
+                  label: PLUGIN_FORM_BUILDER.BUTTONS
+                  classes: data-field
+                  style: vertical
+                  collapsed: true
+
+                  fields:
+                    .type:
+                      type: select
+                      label: PLUGIN_FORM_BUILDER.BUTTON_FIELD_TYPE
+                      options:
+                        submit: Submit
+                        reset: Reset
+                    .value:
+                      type: text
+                      label: PLUGIN_FORM_BUILDER.BUTTON_LABEL
+                      classes: field-label
+                      placeholder: PLUGIN_FORM_BUILDER.BUTTON_LABEL
+                      validate:
+                        required: true
+                    .key:
+                      type: key
+                      label: PLUGIN_FORM_BUILDER.FIELD_NAME
+                      placeholder: Leave blank to generate name from field label
+                      help: PLUGIN_FORM_BUILDER.FIELD_NAME_HELP
+                      classes: field-key
+                      validate:
+                        required: true
+                        type: slug
+                        pattern: '[a-z0-9\-_]+'
+                    .classes:
+                      type: text
+                      label: PLUGIN_FORM_BUILDER.BUTTON_CLASSES
+                      toggleable: true
+
+        process:
+          type: tab
+          title: Process
+          fields:
+
+            header.form.process.captcha:
+              type: toggle
+              label: PLUGIN_FORM_BUILDER.PROCESS_CAPTCHA
+              options:
+                1: On
+                0: Off
+              highlight: 1
+              default: 1
+              validate:
+                type: bool
+
+            header.form.process.save:
+              type: section
+              title: PLUGIN_FORM_BUILDER.SAVE_DATA_TITLE
+              text: PLUGIN_FORM_BUILDER.SAVE_DATA_TEXT
+              underline: true
+              fields:
+
+                header.form.process.save.fileprefix:
+                  type: text
+                  label: PLUGIN_FORM_BUILDER.FILE_PREFIX
+                  config-default@: plugins.form-builder.process_fileprefix
+                  validate:
+                    required: true
+
+                header.form.process.save.dateformat:
+                  type: text
+                  label: PLUGIN_FORM_BUILDER.DATE_FORMAT
+                  config-default@: plugins.form-builder.process_dateformat
+                  validate:
+                    required: true
+
+                header.form.process.save.extension:
+                  type: text
+                  label: PLUGIN_FORM_BUILDER.EXTENSION
+                  config-default@: plugins.form-builder.process_extension
+                  validate:
+                    required: true
+
+                header.form.process.save.body:
+                  type: text
+                  label: PLUGIN_FORM_BUILDER.FILE_BODY
+                  config-default@: plugins.form-builder.process_body
+                  validate:
+                    required: true
+
+            header.form.process.email:
+              type: section
+              title: PLUGIN_FORM_BUILDER.EMAIL_DATA_TITLE
+              underline: true
+              fields:
+
+                header.form.process.email.from:
+                  type: text
+                  label: PLUGIN_FORM_BUILDER.EMAIL_FROM
+                  default: "{{ config.plugins.email.from }}"
+                  validate:
+                    required: true
+
+                header.form.process.email.to:
+                  type: text
+                  label: PLUGIN_FORM_BUILDER.EMAIL_TO
+                  default: "{{ config.plugins.email.to }}"
+                  validate:
+                    required: true
+
+                header.form.process.email.cc:
+                  type: text
+                  label: PLUGIN_FORM_BUILDER.EMAIL_CC
+                  default: "{{ config.plugins.email.cc }}"
+
+                header.form.process.email.bcc:
+                  type: text
+                  label: PLUGIN_FORM_BUILDER.EMAIL_BCC
+                  default: "{{ config.plugins.email.bcc }}"
+
+                header.form.process.email.reply_to:
+                  type: text
+                  label: PLUGIN_FORM_BUILDER.EMAIL_REPLY_TO
+                  default: "{{ config.plugins.email.reply-to }}"
+
+                header.form.process.email.subject:
+                  type: text
+                  label: PLUGIN_FORM_BUILDER.SUBJECT
+                  config-default@: plugins.form-builder.email_subject
+                  validate:
+                    required: true
+
+                header.form.process.email.body:
+                  type: text
+                  label: PLUGIN_FORM_BUILDER.BODY
+                  config-default@: plugins.form-builder.email_body
+                  validate:
+                    required: true
+
+            post_actions:
+              type: section
+              title: PLUGIN_FORM_BUILDER.ACTIONS_TITLE
+              underline: true
+              fields:
+
+                header.form.process.message:
+                  type: text
+                  label: PLUGIN_FORM_BUILDER.MESSAGE_TITLE
+                  config-default@: plugins.form-builder.process_message
+                  validate:
+                    required: true
+
+                header.form.process.display:
+                  # TODO make this a page select field.
+                  type: text
+                  label: PLUGIN_FORM_BUILDER.PAGE_DISPLAY
+                  toggleable: true
+                  help: Select a subpage to embed within the form upon submitting the form.
+
+                header.form.process.redirect:
+                  type: text
+                  label: PLUGIN_FORM_BUILDER.REDIRECT_LABEL
+                  toggleable: true
+
+        options:
+          type: tab
+          title: Options
+          fields:
+
+            publishing:
+              type: section
+              title: PLUGIN_ADMIN.PUBLISHING
+              underline: true
+              fields:
+
+                header.published:
+                  type: toggle
+                  label: Published
+                  # toggleable: true
+                  options:
+                    1: PLUGIN_ADMIN.YES
+                    0: PLUGIN_ADMIN.NO
+                  highlight: 1
+                  default: 1
+                  validate:
+                    type: bool
+
+                header.date:
+                  type: news-datetime
+                  label: PLUGIN_ADMIN.DATE
+                  help: PLUGIN_ADMIN.DATE_HELP
+                  format: Y-m-d G:i
+                  autocomplete: off
+
+                # header.modified_date:
+                #   type: news-datetime
+                #   label: PLUGIN_FORM_BUILDER.MODIFIED_DATE
+                #   help: PLUGIN_FORM_BUILDER.MODIFIED_DATE_HELP
+                #   format: Y-m-d G:i
+                #   autocomplete: off
+
+                header.publish_date:
+                  type: news-datetime
+                  label: PLUGIN_ADMIN.PUBLISHED_DATE
+                  toggleable: true
+                  help: PLUGIN_ADMIN.PUBLISHED_DATE_HELP
+                  format: Y-m-d G:i
+                  autocomplete: off
+
+                header.unpublish_date:
+                  type: news-datetime
+                  label: PLUGIN_ADMIN.UNPUBLISHED_DATE
+                  toggleable: true
+                  help: PLUGIN_ADMIN.UNPUBLISHED_DATE_HELP
+                  format: Y-m-d G:i
+                  autocomplete: off
+
+            form_options:
+              type: section
+              title: PLUGIN_FORM_BUILDER.FORM_OPTIONS
+              underline: true
+              fields:
+
+                header.form.id:
+                  type: text
+                  label: PLUGIN_FORM_BUILDER.FORM_ID
+                  toggleable: true
+
+                header.form.classes:
+                  type: text
+                  label: PLUGIN_FORM_BUILDER.FORM_CLASSES
+                  toggleable: true
+                  help: PLUGIN_FORM_BUILDER.FORM_CLASSES.HELP
+
+                header.form.method:
+                  type: select
+                  label: PLUGIN_FORM_BUILDER.FORM_METHOD
+                  toggleable: true
+                  options:
+                    POST: POST
+                    GET: GET
+                  default: POST
+                  highlight: POST
+
+                header.form.action:
+                  type: text
+                  label: PLUGIN_FORM_BUILDER.FORM_ACTION
+                  toggleable: true
+
+                header.form.template:
+                  type: text
+                  label: PLUGIN_FORM_BUILDER.FORM_TEMPLATE
+                  toggleable: true
+
+                header.form.attributes:
+                  type: array
+                  label: PLUGIN_FORM_BUILDER.FORM_ATTRIBUTES
+                  toggleable: true
+                  placeholder_key: Key
+                  placeholder_value: Value
+
+                header.form.inline_errors:
+                  type: toggle
+                  label: PLUGIN_FORM_BUILDER.FORM_INLINE_ERRORS
+                  toggleable: true
+                  highlight: 1
+                  default: 1
+                  options:
+                    1: PLUGIN_ADMIN.YES
+                    0: PLUGIN_ADMIN.NO
+                  validate:
+                    type: bool
+
+                header.form.client_side_validation:
+                  type: toggle
+                  label: PLUGIN_FORM_BUILDER.FORM_CLIENT_SIDE_VALIDATION
+                  toggleable: true
+                  highlight: 0
+                  default: 0
+                  options:
+                    1: PLUGIN_ADMIN.YES
+                    0: PLUGIN_ADMIN.NO
+                  validate:
+                    type: bool
+
+                header.form.refresh_prevention:
+                  type: toggle
+                  label: PLUGIN_FORM_BUILDER.FORM_REFRESH_PREVENTION
+                  toggleable: true
+                  highlight: 0
+                  default: 0
+                  options:
+                    1: PLUGIN_ADMIN.YES
+                    0: PLUGIN_ADMIN.NO
+                  validate:
+                    type: bool
+
+                # TODO Add XSS Check support with enabled rules and safe checks.
+                # header.form.xss_check:
+                #   type: toggle
+                #   label PLUGIN_FORM_BUILDER.FORM_XSS_CHECK
+                #   highlight: 0
+                #   default: 0
+                #   options:
+                #     1: PLUGIN_ADMIN.YES
+                #     0: PLUGIN_ADMIN.NO
+                #   validate:
+                #     type: bool
+
+                header.form.keep_alive:
+                  type: toggle
+                  label: PLUGIN_FORM_BUILDER.FORM_KEEP_ALIVE
+                  toggleable: true
+                  highlight: 0
+                  default: 0
+                  options:
+                    1: PLUGIN_ADMIN.YES
+                    0: PLUGIN_ADMIN.NO
+                  validate:
+                    type: bool
+
+                # TODO Look into potentially adding Fieldset support.

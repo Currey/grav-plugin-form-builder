@@ -1,0 +1,11 @@
+{% set lang = grav.language.getActive|default( grav.language.getDefault ) -%}
+<article class="form">
+{% set form = {
+    name: object.header.form.name,
+    fields: object.header.form.fields,
+    buttons: object.header.form.buttons,
+    process: object.header.form.process
+} %}
+
+{% include 'forms/form.html.twig' with { form: forms(form) } %}
+</article>

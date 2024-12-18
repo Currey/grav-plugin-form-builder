@@ -1,0 +1,131 @@
+name: Form Builder
+slug: form-builder
+type: plugin
+version: 0.8.1
+description: Admin interface to build simple forms as flex objects to insert into page or modular templates.
+icon: clipboard
+author:
+  name: Benjamin Currey
+  email: benjamin@currey.com.au
+homepage: https://github.com/currey/grav-plugin-form-builder
+demo: http://demo.yoursite.com
+keywords: grav, plugin, etc
+bugs: https://github.com/currey/grav-plugin-form-builder/issues
+docs: https://github.com/currey/grav-plugin-form-builder/blob/develop/README.md
+license: MIT
+
+dependencies:
+  - { name: grav, version: '>=1.6.0' }
+  - { name: form, version: '>=7.4.0' }
+  - { name: email, version: '>=4.0.0' }
+  - { name: flex-objects, version: '>=1.3.0' }
+
+form:
+  validation: loose
+  fields:
+    enabled:
+      type: toggle
+      label: PLUGIN_ADMIN.PLUGIN_STATUS
+      highlight: 1
+      default: 0
+      options:
+        1: PLUGIN_ADMIN.ENABLED
+        0: PLUGIN_ADMIN.DISABLED
+      validate:
+        type: bool
+
+    process_defaults:
+      type: section
+      title: PLUGIN_FORM_BUILDER.CONFIG.PROCESS_DEFAULTS
+      underline: true
+      fields:
+
+        process_fileprefix:
+          type: text
+          label: PLUGIN_FORM_BUILDER.FILE_PREFIX
+          default: "{{ form.name }}-"
+          validate:
+            required: true
+
+        process_dateformat:
+          type: text
+          label: PLUGIN_FORM_BUILDER.DATE_FORMAT
+          default: Ymd-His-u
+          validate:
+            required: true
+
+        process_extension:
+          type: text
+          label: PLUGIN_FORM_BUILDER.EXTENSION
+          default: txt
+          validate:
+            required: true
+
+        process_body:
+          type: text
+          label: PLUGIN_FORM_BUILDER.FILE_BODY
+          default: "{% include 'forms/data.txt.twig' %}"
+          validate:
+            required: true
+
+    email_defaults:
+      type: section
+      title: PLUGIN_FORM_BUILDER.CONFIG.EMAIL_DEFAULTS
+      underline: true
+      fields:
+
+        email_from:
+          type: text
+          label: PLUGIN_FORM_BUILDER.EMAIL_FROM
+          default: "{{ config.plugins.email.from }}"
+          validate:
+            required: true
+
+        email_to:
+          type: text
+          label: PLUGIN_FORM_BUILDER.EMAIL_TO
+          default: "{{ config.plugins.email.to }}"
+          validate:
+            required: true
+
+        email_cc:
+          type: text
+          label: PLUGIN_FORM_BUILDER.EMAIL_CC
+          default: "{{ config.plugins.email.cc }}"
+
+        email_bcc:
+          type: text
+          label: PLUGIN_FORM_BUILDER.EMAIL_BCC
+          default: "{{ config.plugins.email.bcc }}"
+
+        email_reply_to:
+          type: text
+          label: PLUGIN_FORM_BUILDER.EMAIL_REPLY_TO
+          default: "{{ config.plugins.email.reply-to }}"
+
+        email_subject:
+          type: text
+          label: PLUGIN_FORM_BUILDER.SUBJECT
+          default: "Form submission by {{ form.value.name|e }}"
+          validate:
+            required: true
+
+        email_body:
+          type: text
+          label: PLUGIN_FORM_BUILDER.BODY
+          default: "{% include 'forms/data.html.twig' %}"
+          validate:
+            required: true
+
+    actions_defaults:
+      type: section
+      title: PLUGIN_FORM_BUILDER.CONFIG.ACTIONS_DEFAULTS
+      underline: true
+      fields:
+
+        process_message:
+          type: text
+          label: PLUGIN_FORM_BUILDER.MESSAGE_TITLE
+          default: "Thank you for getting in touch!"
+          validate:
+            required: true

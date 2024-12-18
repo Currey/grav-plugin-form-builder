@@ -1,0 +1,9 @@
+{% block content %}
+
+<div class="form-wrap">
+
+  {% include "partials/form-renderer.html.twig" with {form_key: page.header.form_builder.form} %}
+
+</div>
+
+{% endblock %}

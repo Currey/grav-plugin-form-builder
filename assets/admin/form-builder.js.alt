@@ -1,0 +1,141 @@
+(function($) {
+  $(function() {
+
+  });
+})(jQuery);
+
+
+$(document).ready(function() {
+
+  // Function to convert string to URL slug
+  function slugify(str) {
+    console.log(str);
+    return str
+      .toLowerCase()
+      .replace(/[^\w ]+/g, '')   // Remove all non-word characters
+      .replace(/ +/g, '_')       // Replace spaces with dashes
+      .replace(/-+/g, '-');      // Replace multiple dashes with a single dash
+  }
+
+  function updateValue(e) {
+    log.textContent = e.target.value;
+  }
+  // Event delegation to handle dynamically added .data-field elements
+  // $(document).on('input', '.data-field li input.field-label', function() {
+  //   var $fieldLabel = $(this);
+  //   var $dataField = $fieldLabel.closest('.data-field li');
+  //   var $fieldKey = $dataField.find('input.field-key');
+  //   var $fieldId = $dataField.find('input.field-id');
+  //
+  //   var slug = slugify($fieldLabel.val());
+  //
+  //   // updateField(slug, $fieldKey);
+  //   // updateField(slug, $fieldId);
+  //
+  //   // Continue updating field-key if it's empty or partially filled
+  //   if ($fieldKey.val() === '' || $fieldKey.val() === slugify($fieldKey.val())) {
+  //     $fieldKey.val(slug);
+  //   }
+  //   // Continue updating field-key if it's empty or partially filled
+  //   if ($fieldId.val() === '' || $fieldId.val() === slugify($fieldId.val())) {
+  //     $fieldId.val(slug);
+  //   }
+  // });
+
+  $('.data-field li').each(function() {
+    var $fieldLabel = $(this).find('input.field-label');
+    var $fieldKey = $(this).find('input.field-key');
+    var $fieldId = $(this).find('input.field-id');
+
+    $fieldLabel.on('change', function() {
+
+      console.log($(this));
+      var slug = slugify($(this).val());
+
+      if ($fieldKey.val() === '' || $fieldKey.val() === slugify($fieldKey.val())) {
+        $fieldKey.val(slug);
+      }
+
+      if ($fieldId.val() === '' || $fieldId.val() === slugify($fieldId.val())) {
+        $fieldId.val(slug);
+      }
+
+    });
+
+  });
+
+  // Ensure all fields are updated before form submission
+  // $('form').on('submit', function() {
+  //   $('.data-field li').each(function() {
+  //     var $fieldLabel = $(this).find('input.field-label');
+  //     var $fieldKey = $(this).find('input.field-key');
+  //     var $fieldId = $(this).find('input.field-id');
+  //
+  //     var slug = slugify($fieldLabel.val());
+  //
+  //     // $fieldKey.updateField(slug);
+  //     // $fieldId.updateField(slug);
+  //
+  //     // Update the field-key if it's empty or partially filled
+  //     if ($fieldKey.val() === '' || $fieldKey.val() === slugify($fieldKey.val())) {
+  //       $fieldKey.val(slug);
+  //     }
+  //     if ($fieldId.val() === '' || $fieldId.val() === slugify($fieldId.val())) {
+  //       $fieldId.val(slug);
+  //     }
+  //   });
+  // });
+
+});
+
+
+
+(function($) {
+  $(function() {
+    var custom = false;
+    var fields = $('.data-field');
+    var key = $('[data-collection-holder="header.form.fields"] input[data-key-observe*="[key]"], [data-collection-holder="header.form.buttons"] input[data-key-observe*="[key]"]');
+    var label = $('[data-collection-holder="header.form.fields"] input[name*="[label]", [data-collection-holder="header.form.buttons"] input[name*="[value]"');
+    var getFields = function getFields(type, target) {
+      target = $(target);
+      var query = "[data-remodal-id=\"".concat(target.closest('[data-remodal-id]').data('remodal-id'), "\"]");
+      return {
+        label: type === 'label' ? $(target) : $("".concat(query, " input[name=\"data[title]\"]")),
+        key: type === 'key' ? $(target) : $("".concat(query, " input[name=\"data[folder]\"]"))
+      };
+    };
+    fields.on()
+    label.on('input focus blur', function (event) {
+      if (custom) {
+        return true;
+      }
+      var elements = getFields('label', event.currentTarget);
+      var slug = $.slugify(elements.title.val(), {
+        custom: {
+          "'": '',
+          '‘': '',
+          '’': ''
+        }
+      });
+      elements.key.val(slug);
+    });
+    key.on('input', function (event) {
+      var elements = getFields('key', event.currentTarget);
+      var input = elements.key.get(0);
+      var value = elements.key.val();
+      var selection = {
+        start: input.selectionStart,
+        end: input.selectionEnd
+      };
+      value = value.toLowerCase().replace(/\s/g, '-').replace(/[^a-z0-9_\-]/g, '');
+      elements.key.val(value);
+      custom = !!value;
+
+      // restore cursor position
+      input.setSelectionRange(selection.start, selection.end);
+    });
+    key.on('focus blur', function (event) {
+      getFields('label').label.trigger('input');
+    });
+  });
+})(jQuery);

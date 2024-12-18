@@ -1,0 +1,15 @@
+form:
+  fields:
+    header.form_builder:
+      type: fieldset
+      title: PLUGIN_FORM_BUILDER.FORM_SELECTOR
+      info: PLUGIN_FORM_BUILDER.FORM_SELECTOR_INFO
+      icon: clipboard
+      fields:
+
+        header.form_builder.form:
+          type: select
+          label: PLUGIN_FORM_BUILDER.SELECT_FORM
+          data-options@: 'Grav\Plugin\FormBuilderPlugin::listForms'
+          options:
+            '': 'Select Form'

@@ -1,0 +1,24 @@
+{% set lang = grav.language.getActive|default( grav.language.getDefault ) -%}
+<article class="form">
+{% set form = {
+    name: object.header.form.name,
+    fields: object.header.form.fields,
+    buttons: object.header.form.buttons,
+    process: object.header.form.process
+} %}
+
+  <form name="{{ header.object.name|default('form') }}" action="{{ uri.url }}" method="post">
+
+    {% for field in form.fields %}
+      {% include 'forms/field.html.twig' with { field: field } %}
+    {% endfor %}
+
+    <div class="buttons">
+      {% for button in header.object.buttons %}
+        <button type="{{ button.type|default('submit') }}">
+          {{ button.value|e }}
+        </button>
+      {% endfor %}
+    </div>
+  </form>
+</article>

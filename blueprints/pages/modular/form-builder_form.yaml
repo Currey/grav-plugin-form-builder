@@ -1,0 +1,15 @@
+title: Form Builder form
+extends@: default
+
+form:
+  fields:
+    tabs:
+      type: tabs
+      active: 1
+
+      fields:
+        content:
+
+          import@:
+            type: form-builder/form-selector
+            context: plugins://form-builder/blueprints/pages

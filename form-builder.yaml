@@ -1,0 +1,13 @@
+enabled: true
+process_fileprefix: '{{ form.name }}-'
+process_dateformat: Ymd-His-u
+process_extension: txt
+process_body: '{% include ''forms/data.txt.twig'' %}'
+email_from: '{{ config.plugins.email.from }}'
+email_to: '{{ config.plugins.email.to }}'
+email_cc: '{{ config.plugins.email.cc }}'
+email_bcc: '{{ config.plugins.email.bcc }}'
+email_reply_to: '{{ config.plugins.email.reply-to }}'
+email_subject: 'Form submission by {{ form.value.name|e }}'
+email_body: '{% include ''forms/data.html.twig'' %}'
+process_message: 'Thank you for getting in touch!'

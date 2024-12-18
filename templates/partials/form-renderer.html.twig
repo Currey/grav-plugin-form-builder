@@ -1,0 +1,22 @@
+{% if form_key %}
+
+  {% set form_data = form_builder(form_key) %}
+
+  {% set form_options = form_options ?: [] %}
+  {% set includes =
+    {
+      form: form_data,
+      form_button_outer_classes: form_data.form_button_outer_classes,
+    }
+  %}
+  {% set includes = includes|merge(form_options) %}
+
+  {% if form_data %}
+      {% include "forms/form.html.twig" with includes only %}
+  {% else %}
+      <p>No form found for the specified key: {{ form_key }}</p>
+  {% endif %}
+
+{% else %}
+    <p>No form found for the specified key.</p>
+{% endif %}

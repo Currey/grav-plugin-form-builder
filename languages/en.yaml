@@ -1,0 +1,90 @@
+PLUGIN_FORM_BUILDER:
+  CONFIG:
+    FORM_BUILDER_PAGE_SLUG: Forms page
+    MENU: Forms
+    PROCESS_DEFAULTS: Form Process Defaults
+    EMAIL_DEFAULTS: Form Email Defaults
+    ACTIONS_DEFAULTS: Form Actions Defaults
+  FORM_BUILDER: Form Builder
+  PLUGIN_DESC: Flex Object based form creation
+
+  NO_ENTRIES: There are currently no forms published.
+  CREATE_FORM: Create form
+  FORM_SELECTOR: Form Selection
+  FORM_SELECTOR_INFO: Select a published form.
+  SELECT_FORM: Select Form
+
+  FORM_TITLE: Form
+  FORM_NAME: Form Name
+  FORM_FIELDS: Form Fields
+  FORM_OPTIONS: Form Options
+  FORM_ID: Form ID
+  FORM_CLASSES: Form Classes
+  FORM_CLASSES_HELP: A space-separated list of class names
+  FORM_METHOD: Method
+  FORM_ACTION: Action
+  FORM_TEMPLATE: Template
+  FORM_ATTRIBUTES: Attributes
+  FORM_INLINE_ERRORS: Inline Errors
+  FORM_CLIENT_SIDE_VALIDATION: Client-side Validation
+  FORM_REFRESH_PREVENTION: Refresh Prevention
+  FORM_XSS_CHECK: XSS Check
+  FORM_KEEP_ALIVE: Keep Alive
+  FIELDS: Fields
+  FIELD_ID: Field ID
+  FIELD_ID_HELP: "ID must only contain a-z, 0-9, '-', '_' characters. It cannot begin with a number."
+  FIELD_ID_PLACEHOLDER: "Leave blank to generate name from field label"
+  FIELD_NAME: Field Name
+  FIELD_NAME_HELP: "Field must only contain a-z, 0-9, '-', '_' characters."
+  FIELD_NAME_PLACEHOLDER: "Leave blank to generate name from field label"
+  FIELD_LABEL: Field Label
+  FIELD_TYPE: Field Type
+  FIELD_PLACEHOLDER_TEXT: Placeholder text
+  FIELD_CLASSES: Field classes
+  FIELD_AUTOCOMPLETE: Autocomplete
+  FIELD_AUTOFOCUS: Autofocus
+  FIELD_DISABLED: Disabled
+  FIELD_NOVALIDATE: Novalidate
+  FIELD_DEFAULT: Default Value
+  FIELD_HELP: Help Text
+  FIELD_HELP_HELP: Adds a tooltip to the field
+  FIELD_ATTR: Attributes
+  FIELD_ATTR_HELP: "Additional attributes to add to field."
+  FIELD_OPTIONS: Options
+  FIELD_OPTIONS_HELP: "Create options for Select, Checkboxes, or Radio field types."
+  VALIDATE_REQUIRED: Required
+  VALIDATE_MESSAGE: Validation Message
+  VALIDATE_MESSAGE_HELP: Message to display on failed field validation.
+  CAPTCHA_FIELD: Captcha Field
+  CAPTCHA_TYPE: Captcha Type
+  BUTTONS_TITLE: Buttons
+  BUTTONS_CLASSES: Button container classes
+  BUTTONS: Buttons
+  BUTTON_NAME: Button Name
+  BUTTON_LABEL: Button Label
+  BUTTON_FIELD_TYPE: Button Type
+  BUTTON_CLASSES: Button Classes
+  PROCESS_TITLE: Process settings
+  PROCESS_INFO: Form submission save settings
+  PROCESS_CAPTCHA: Process Captcha
+  SAVE_DATA_TITLE: Save data
+  SAVE_DATA_TEXT: Form processing defaults can be set in the [Form Builder](/admin/plugins/form-builder) plugin
+  FILE_PREFIX: File prefix
+  DATE_FORMAT: Date format
+  EXTENSION: Extension
+  FILE_BODY: File body
+  EMAIL_DATA_TITLE: Email data
+  EMAIL_FROM: From address
+  EMAIL_TO: To address
+  EMAIL_CC: CC address
+  EMAIL_BCC: BCC address
+  EMAIL_REPLY_TO: Reply-to address
+  SUBJECT: Subject
+  BODY: Body
+  ACTIONS_TITLE: Upon Submitting
+  MESSAGE_TITLE: Message
+  PAGE_DISPLAY: Display
+  REDIRECT_LABEL: Redirect
+  PROCESS_MESSAGE: "Thank you for getting in touch!"
+  MODIFIED_DATE: Last Modified
+  MODIFIED_DATE_HELP: The date the form was last modified.
